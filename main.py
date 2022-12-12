@@ -5,8 +5,6 @@ import logging
 from datetime import datetime, timedelta 
 from apscheduler.schedulers.background import BackgroundScheduler
 
-dt_object = datetime.now()
-
 scheduler = BackgroundScheduler()
 
 def shutdown():
@@ -14,6 +12,7 @@ def shutdown():
     os.system('systemctl poweroff') 
 
 def call_api():
+    dt_object = datetime.now()
     logging.info("Call API...")
     logging.info(dt_object)
     header_var = { "token":"11FC5D19-9D444406-B72C0B37-7EE96BBE" }
@@ -26,8 +25,9 @@ def call_api():
     else: #If Loadshedding cancelled, then stop shutdown from occurring
         scheduler.remove_job('shutdown')
 
+logging.basicConfig(filename="shutdown_execution.log", level=logging.DEBUG, format="%(asctime)s %(message)s")
+call_api()
 scheduler.add_job(call_api,'interval', minutes=60, id='call_api')
 scheduler.start()
-logging.basicConfig(filename="shutdown_execution.log", level=logging.DEBUG, format="%(asctime)s %(message)s")
 while True:
     time.sleep(60)
