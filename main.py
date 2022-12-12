@@ -12,16 +12,16 @@ def shutdown():
     os.system('systemctl poweroff') 
 
 def call_api():
-    dt_object = datetime.now()
     logging.info("Call API...")
-    logging.info(dt_object)
+    dt_object = datetime.now()
     header_var = { "token":"11FC5D19-9D444406-B72C0B37-7EE96BBE" }
     response = requests.get("https://developer.sepush.co.za/business/2.0/area?id=tshwane-3-waterkloofpark", headers=header_var)
     data = response.json()
     if (len(data["events"]) > 0):
         dt_object = datetime.fromisoformat(data["events"][0]["start"])
         dt_object = dt_object - timedelta(minutes=5)
-        scheduler.add_job(shutdown, 'cron', year=dt_object.year, month=dt_object.month, day= dt_object.day, hour=dt_object.hour, minute=dt_object.minute, id='shutdown', replace_existing=True)
+        scheduler.add_job(shutdown, 'cron', year=dt_object.year, month=dt_object.month, day= dt_object.day, hour=dt_object.hour, minute=dt_object.minute, id='shutdown', replace_existing=Tru>
+        logging.info("Shutdown scheduled for " + dt_object)
     else: #If Loadshedding cancelled, then stop shutdown from occurring
         scheduler.remove_job('shutdown')
 
