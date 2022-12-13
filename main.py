@@ -3,15 +3,15 @@ import requests
 import time
 import os
 import logging
-from dotenv import load_dotenv 
-from datetime import datetime, timedelta 
+from dotenv import load_dotenv
+from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 load_dotenv() #Load .env file into system
 scheduler = BackgroundScheduler()
 
 def shutdown():
-    logging.info("Shutdown called")
-    os.system('systemctl poweroff') 
+    logging.info("Suspend called")
+    os.system('systemctl poweroff')
 
 def call_api():
     logging.info("Call API...")
@@ -27,7 +27,7 @@ def call_api():
     else: #If Loadshedding cancelled, then stop shutdown from occurring
         scheduler.remove_job('shutdown')
 
-logging.basicConfig(filename="shutdown_execution.log", level=logging.DEBUG, format="%(asctime)s %(message)s")
+logging.basicConfig(filename="/home/tertiusvdg/shutdown_execution.log", level=logging.DEBUG, format="%(asctime)s %(message)s")
 call_api()
 scheduler.add_job(call_api,'interval', minutes=60, id='call_api')
 scheduler.start()
